@@ -1,35 +1,24 @@
+import { useSortStore } from '@/store/store';
 import React, { useState } from 'react';
 
-interface Item {
-  id: number;
-  name: string;
-}
-
 const Sortbar: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' },
-    // Add more items as needed
-  ]);
-  const sortItems = (property: keyof Item) => {
-    const sortedItems = [...items].sort((a, b) => {
-      if (a[property] < b[property]) return -1;
-      if (a[property] > b[property]) return 1;
-      return 0;
-    });
-
-    setItems(sortedItems);
+  const selectedOption = useSortStore((state) => state.selectedOption);
+  const setSelectedOption = useSortStore((state) => state.setSelectedOption);
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(event.target.value);
+    console.log(useSortStore.getState().selectedOption);
   };
-
   return (
     <div className="w-32 flex relative flex-col items-center rounded-lg bg-slate-300 border-2">
       <div>Сортировать</div>
-      <ul className="absolute">
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-        <li>1</li>
-      </ul>
+      <select value={selectedOption} onChange={handleOptionChange}>
+        <option value="">Select an option</option>
+        <option value="ASC">А-Я</option>
+        <option value="DESC">Я-А</option>
+        <option value="option3">Дата</option>
+        <option value="option4">Цена</option>
+      </select>
+      <p>Selected option: {selectedOption}</p>
     </div>
   );
 };

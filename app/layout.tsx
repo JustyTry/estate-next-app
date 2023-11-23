@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { PT_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/Providers';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 const ptsans = PT_Sans({
   weight: '400',
