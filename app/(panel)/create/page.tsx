@@ -35,9 +35,6 @@ const EstateCardForm = () => {
     });
   };
 
-  useEffect(() => {
-    fetch('/api/create').then((res) => console.log(res));
-  }, []);
   return (
     <div className="w-full flex">
       <div className="w-2/12">

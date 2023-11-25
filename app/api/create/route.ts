@@ -6,13 +6,11 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const db = new Database('./database/db.sqlite');
 
   const stmt = db.prepare('SELECT * FROM apartments').all();
-  console.log(stmt);
   return NextResponse.json({ stmt });
 }
 export async function POST(req: Request, res: Response) {
   const db = new Database('./database/db.sqlite');
   const body = await req.json();
-  console.log(body);
   const stmt = db.prepare(
     'INSERT INTO apartments (title, cost, rooms_amount, square, floor, adress, date) VALUES (?,?,?,?,?,?,?)',
   );

@@ -6,7 +6,6 @@ const Sortbar: React.FC = () => {
   const setSelectedOption = useSortStore((state) => state.setSelectedOption);
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
-    console.log(useSortStore.getState().selectedOption);
   };
   return (
     <div className="w-32 flex relative flex-col items-center rounded-lg bg-slate-300 border-2">

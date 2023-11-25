@@ -39,7 +39,6 @@ export const useStore = create<StoreState>((set, get) => ({
     const { data } = get();
 
     const sortedData = [...data].sort((a: any, b: any) => a[sortBy] - b[sortBy]);
-    console.log(sortedData);
     set({ data: sortedData });
   },
 }));
