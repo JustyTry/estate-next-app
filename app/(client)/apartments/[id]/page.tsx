@@ -1,20 +1,55 @@
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
+"use client";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const MapComponent = dynamic(() => import('@/components/Map'), {
-  ssr: false
+const MapComponent = dynamic(() => import("@/components/Map"), {
+  ssr: false,
 });
-const Page = () => {
-  return (
-    <div className="w-full flex justify-center ">
 
-      <div className="w-8/12 max-xl:w-full flex justify-between">
-        <div className="w-8/12">
-          <h1 className=" text-4xl">2-комн. квартира, 53,3 м²</h1>
-          <h2 className="text-md my-6 text-gray-600">
-            Красноярский край, Красноярск, р-н Кировский, мкр. Первомайский, ул. Кутузова, 83А
-          </h2>
-          <div className="w-full box-border ">
+interface EstateCard {
+  title: string;
+  adress: string;
+  cost: number;
+  rooms_amount: number;
+  square: number;
+  living_space: number;
+  floor: number;
+
+  description: string;
+  estate_type: string;
+  ceiling_height: number;
+  balcony_or_loggia_amount: number;
+  bathroom_amount: number;
+
+  year_of_construction: number;
+  chute: boolean;
+  number_of_elevators: number;
+  building_type: string;
+  entrances: number;
+}
+
+const Page = () => {
+  const [data, setData] = useState<EstateCard>();
+  const id = useParams();
+  useEffect(() => {
+    fetch(`/api/getrecord?id=${id.id}`)
+      .then((res) => res.json())
+      .then((resdata) => {
+        setData(resdata["stmt"]);
+        console.log(data);
+      });
+  }, []);
+
+  if (!data) return <></>;
+  return (
+    <div className="flex w-full justify-center ">
+      <div className="flex w-8/12 justify-between max-xl:w-full">
+        <div className="w-7/12">
+          <h1 className=" text-4xl">{data.title}</h1>
+          <h2 className="text-md my-6 text-gray-600">{data.adress}</h2>
+          <div className="box-border w-full ">
             <Image
               className="w-full"
               src="/estate-example.jpg"
@@ -24,14 +59,14 @@ const Page = () => {
               alt=""
             />
           </div>
-          <ul className="grid grid-cols-3 gap-6 w-full my-8">
+          <ul className="my-8 grid w-full grid-cols-3 gap-6">
             <li className="flex flex-col">
               <span>Общая площадь</span>
-              <span>53,3 м²</span>
+              <span>{data.square}</span>
             </li>
             <li className="flex flex-col">
-              <span>Общая площадь</span>
-              <span>53,3 м²</span>
+              <span>Жилая площадь</span>
+              <span>{data.living_space}</span>
             </li>
             <li className="flex flex-col">
               <span>Общая площадь</span>
@@ -46,135 +81,90 @@ const Page = () => {
               <span>53,3 м²</span>
             </li>
           </ul>
-          <p>
-            Квартира полностью готова к сделке, любая форма расчёта. Дом стоит в прекрасной локации,
-            где имеется инфраструктура, детский сад в трех минутах, салон красоты, магазины,
-            отличная транспортная развязка. О квартире: светлая, средний этаж, теплая, с раздельным
-            санузлом, что для семьи часто крайне важно, комнаты раздельные. В прихожей достаточно
-            места для большого вместительного шкафа, а комнаты правильной формы дают возможность
-            расставить мебель практично и комфортно для жизни. Вся сумма в договоре, один
-            собственник, никто не прописан. фото квартиры соответствуют действительности.
-          </p>
-          <div className="w-full flex justify-between gap-x-24 mt-8">
+          <p>{data.description}</p>
+          <div className="mt-8 flex w-full justify-between gap-x-24">
             <div className="w-1/2">
-              <h2 className="text-2xl font-semibold mb-8">О квартире</h2>
-              <ul className="w-full flex flex-col text-lg text-gray-500 gap-y-4">
-                <li className="w-full flex justify-between whitespace-nowrap">
+              <h2 className="mb-8 text-2xl font-semibold">О квартире</h2>
+              <ul className="flex w-full flex-col gap-y-6 text-xl text-gray-500">
+                <li className="flex w-full justify-between whitespace-nowrap">
                   <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.estate_type}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Общая площадь</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.square}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Высота потолков</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.ceiling_height}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Санузел</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.bathroom_amount}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Балкон/лоджия</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.balcony_or_loggia_amount}</span>
                 </li>
               </ul>
             </div>
             <div className="w-1/2">
-              <h2 className="text-2xl font-semibold mb-8">О доме</h2>
-              <ul className="w-full flex flex-col text-lg text-gray-500 gap-y-4">
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+              <h2 className="mb-8 text-2xl font-semibold">О доме</h2>
+              <ul className="flex w-full flex-col gap-y-4 text-lg text-gray-500">
+                <li className=" flex w-full  justify-between whitespace-nowrap">
+                  <span>Год постройки</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.year_of_construction}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Мусоропровод</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.chute}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Количество лифтов</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.number_of_elevators}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Тип дома</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.building_type}</span>
                 </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
-                </li>
-                <li className="w-full flex justify-between whitespace-nowrap">
-                  <span>Тип жилья</span>
-                  <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-                  <span> Вторичка</span>
+                <li className="flex w-full justify-between whitespace-nowrap">
+                  <span>Подъезды</span>
+                  <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+                  <span>{data.entrances}</span>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="bg-red-200 w-full h-96 my-32 overflow-hidden"><MapComponent /></div>
+          <div className="my-32 h-96 w-full overflow-hidden bg-red-200">
+            <MapComponent />
+          </div>
         </div>
-        <div className="w-3/12 pt-5 px-8 border-2">
-          <h1 className="text-3xl font-semibold mb-8">5 800 000 ₽</h1>
-          <ul className="w-full flex flex-col text-lg text-gray-500 gap-y-4">
-            <li className="w-full flex justify-between whitespace-nowrap text-sm">
+        <div className="w-4/12 border-2 px-8 pt-5">
+          <h1 className="mb-8 text-3xl font-semibold">{data.cost} ₽</h1>
+          <ul className="flex w-full flex-col gap-y-4 text-lg text-gray-500">
+            <li className="flex w-full justify-between whitespace-nowrap">
               <span>Цена за метр</span>
-              <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
-              <span>108 818 ₽/м²</span>
+              <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
+              <span>{data.cost / data.square} ₽/м²</span>
             </li>
-            <li className="w-full flex justify-between whitespace-nowrap text-sm">
+            <li className="flex w-full justify-between whitespace-nowrap">
               <span>Условия сделки</span>
-              <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
+              <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
               <span>свободная продажа</span>
             </li>
-            <li className="w-full flex justify-between whitespace-nowrap text-sm">
+            <li className="flex w-full justify-between whitespace-nowrap">
               <span>Ипотека</span>
-              <span className="w-full border-b-2 border-dotted mb-2 mx-3"></span>
+              <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
               <span>возможна</span>
             </li>
           </ul>
