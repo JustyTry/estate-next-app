@@ -1,7 +1,7 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 interface EstateCard {
@@ -25,25 +25,28 @@ interface EstateCard {
   building_type: string;
   entrances: number;
 
-  images: FileList;
+  images: string[];
 }
 const EstateCardForm = () => {
   const { register, handleSubmit } = useForm<EstateCard>();
-  const [inputFiles, setInputFiles] = useState<File>();
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement & { files: FileList }>(null);
   const onSubmit: SubmitHandler<EstateCard> = (data) => {
     const blobArr = new Array();
-    for (let i = 0; i < fileInputRef.current.files.length; i++) {
-      blobArr.push(
-        URL.createObjectURL(new Blob([fileInputRef.current.files[0]])),
-      );
+    try {
+      for (let i = 0; i < fileInputRef.current!.files.length; i++) {
+        blobArr.push(
+          URL.createObjectURL(new Blob([fileInputRef.current!.files[0]])),
+        );
+      }
+      data.images = blobArr;
+      fetch("/api/create", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      console.log(data);
+    } catch (error) {
+      console.error(error);
     }
-    data.images = blobArr.join(", ");
-    fetch("/api/create", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    console.log(data);
   };
 
   return (
@@ -95,7 +98,6 @@ const EstateCardForm = () => {
             type="file"
             {...register("images")}
             multiple
-            onChange={(e) => setInputFiles(e.target.files![0])}
             ref={fileInputRef}
             required
           />
