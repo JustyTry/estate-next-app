@@ -1,7 +1,7 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 interface EstateCard {
@@ -24,25 +24,27 @@ interface EstateCard {
   number_of_elevators: number;
   building_type: string;
   entrances: number;
+
+  images: FileList;
 }
 const EstateCardForm = () => {
   const { register, handleSubmit } = useForm<EstateCard>();
-
+  const [inputFiles, setInputFiles] = useState<File>();
+  const fileInputRef = useRef(null);
   const onSubmit: SubmitHandler<EstateCard> = (data) => {
+    const blobArr = new Array();
+    for (let i = 0; i < fileInputRef.current.files.length; i++) {
+      blobArr.push(
+        URL.createObjectURL(new Blob([fileInputRef.current.files[0]])),
+      );
+    }
+    data.images = blobArr.join(", ");
     fetch("/api/create", {
       method: "POST",
       body: JSON.stringify(data),
     });
+    console.log(data);
   };
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   fetch('/api/create', {
-  //     method: 'POST',
-  //     body: JSON.stringify(estateCard),
-  //   });
-  // };
 
   return (
     <div className="flex w-full">
@@ -89,6 +91,15 @@ const EstateCardForm = () => {
           <input {...register("building_type")} />
           <label>Количество подъездов</label>
           <input {...register("entrances")} />
+          <input
+            type="file"
+            {...register("images")}
+            multiple
+            onChange={(e) => setInputFiles(e.target.files![0])}
+            ref={fileInputRef}
+            required
+          />
+
           <input type="submit" />
         </form>
       </div>

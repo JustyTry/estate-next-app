@@ -11,9 +11,9 @@ const ApartmentRecord = (data: any) => {
         <div className="flex h-1/2 flex-col justify-between px-6">
           <div className="pt-4 text-2xl">{data.cost} руб.</div>
           <ul className="flex justify-between text-lg">
-            <li>{data.square}</li>
-            <li>{data.floor}</li>
-            <li>{data.rooms_amount}</li>
+            <li>{data.square} м²</li>
+            <li>{data.floor} Этаж</li>
+            <li>{data.rooms_amount} Комн.</li>
           </ul>
           <div className="pb-1">Менжинского 60, 133</div>
         </div>

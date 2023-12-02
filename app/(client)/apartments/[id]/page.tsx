@@ -44,7 +44,7 @@ const Page = () => {
 
   if (!data) return <></>;
   return (
-    <div className="flex w-full justify-center ">
+    <div className="mt-20 flex w-full justify-center">
       <div className="flex w-8/12 justify-between max-xl:w-full">
         <div className="w-7/12">
           <h1 className=" text-4xl">{data.title}</h1>
@@ -149,7 +149,7 @@ const Page = () => {
             <MapComponent />
           </div>
         </div>
-        <div className="w-4/12 border-2 px-8 pt-5">
+        <div className="sticky top-20 h-fit w-4/12 border-2 px-8 pt-5">
           <h1 className="mb-8 text-3xl font-semibold">{data.cost} ₽</h1>
           <ul className="flex w-full flex-col gap-y-4 text-lg text-gray-500">
             <li className="flex w-full justify-between whitespace-nowrap">
@@ -167,6 +167,9 @@ const Page = () => {
               <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
               <span>возможна</span>
             </li>
+            <button className="m-12 h-12 rounded-lg bg-sky-400 text-white">
+              Оставить заявку
+            </button>
           </ul>
         </div>
       </div>

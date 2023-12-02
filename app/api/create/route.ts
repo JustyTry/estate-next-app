@@ -1,21 +1,14 @@
 import Database from "better-sqlite3";
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  if (req.method !== "POST") {
-    res.status(405).json({ message: "Method Not Allowed" });
-    return;
-  }
-
+export async function POST(req: Request, res: NextApiResponse) {
   const db = new Database("./database/db.sqlite");
-  const body = await req.body;
-
+  const body = await req.json();
+  console.log(body);
   try {
     const stmt = db.prepare(
-      "INSERT INTO apartments (title, adress, cost, rooms_amount, square, living_space, floor, description, estate_type, ceiling_height, balcony_or_loggia_amount, bathroom_amount, year_of_construction, chute, number_of_elevators, building_type, entrances, date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO apartments  (title, adress, cost, rooms_amount, square, living_space, floor, description, estate_type, ceiling_height, balcony_or_loggia_amount, bathroom_amount, year_of_construction, chute, number_of_elevators, building_type, entrances, images, date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
     );
     stmt.run(
       body.title,
@@ -35,15 +28,11 @@ export default async function handler(
       body.number_of_elevators,
       body.building_type,
       body.entrances,
+      body.images,
       Date.now(),
     );
-
-    res.status(200).json({ message: "Data inserted successfully" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "An error occurred while inserting data", error });
   } finally {
     db.close();
   }
+  return NextResponse.json(200);
 }
