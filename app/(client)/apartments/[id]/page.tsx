@@ -28,6 +28,8 @@ interface EstateCard {
   number_of_elevators: number;
   building_type: string;
   entrances: number;
+
+  images: string[];
 }
 
 const Page = () => {
@@ -43,6 +45,7 @@ const Page = () => {
   }, []);
 
   if (!data) return <></>;
+
   return (
     <div className="mt-20 flex w-full justify-center">
       <div className="flex w-8/12 justify-between max-xl:w-full">
@@ -50,14 +53,20 @@ const Page = () => {
           <h1 className=" text-4xl">{data.title}</h1>
           <h2 className="text-md my-6 text-gray-600">{data.adress}</h2>
           <div className="box-border w-full ">
-            <Image
-              className="w-full"
-              src="/estate-example.jpg"
-              width={700}
-              height={400}
-              sizes=""
-              alt=""
-            />
+            {data.images
+              ?.split(", ")
+              .map((image: string, index: number) => (
+                <Image
+                  key={index}
+                  className="w-full"
+                  src={image}
+                  width={700}
+                  height={400}
+                  sizes=""
+                  alt=""
+                  unoptimized
+                />
+              ))}
           </div>
           <ul className="my-8 grid w-full grid-cols-3 gap-6">
             <li className="flex flex-col">
@@ -155,7 +164,13 @@ const Page = () => {
             <li className="flex w-full justify-between whitespace-nowrap">
               <span>Цена за метр</span>
               <span className="mx-3 mb-2 w-full border-b-2 border-dotted"></span>
-              <span>{data.cost / data.square} ₽/м²</span>
+              <span>
+                {Math.round(
+                  parseInt(data.cost.toString().replace(/\s/g, "")) /
+                    parseFloat(data.square.toString()),
+                )}{" "}
+                ₽/м²
+              </span>
             </li>
             <li className="flex w-full justify-between whitespace-nowrap">
               <span>Условия сделки</span>

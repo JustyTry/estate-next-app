@@ -42,7 +42,7 @@ export default function Apartments() {
         <div className="grid w-full grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1">
           {data["stmt"].map((el: any, index: number) => {
             const { key, ...otherProps } = el;
-            return <ApartmentRecord key={key} {...otherProps} />;
+            return <ApartmentRecord key={index} {...otherProps} />;
           })}
         </div>
       </div>
