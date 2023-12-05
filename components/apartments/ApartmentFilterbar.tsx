@@ -5,7 +5,7 @@ const ApartmentFilterbar = () => {
   const [openedFilter, setOpenedFilter] = useState<string>("");
 
   return (
-    <div className="mt-8 h-16 w-full">
+    <div className="mt-8 h-20 w-full">
       <ul className="flex h-2/3 w-full items-center">
         <div className="relative h-full w-2/12">
           <button
