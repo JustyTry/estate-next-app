@@ -65,7 +65,6 @@ const Page = () => {
                   height={400}
                   sizes=""
                   alt=""
-                  unoptimized
                 />
               ))}
           </div>

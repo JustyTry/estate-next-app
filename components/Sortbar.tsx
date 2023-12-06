@@ -1,5 +1,5 @@
 import { useSortStore } from "@/store/store";
-import React, { useState } from "react";
+import React from "react";
 
 const Sortbar: React.FC = () => {
   const selectedOption = useSortStore((state) => state.selectedOption);

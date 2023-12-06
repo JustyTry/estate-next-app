@@ -1,15 +1,33 @@
-"use client";
-import React, { useState } from "react";
+import { useFilterProps, useOpenedFilter } from "@/store/apartmentsStore";
+import React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const ApartmentFilterbar = () => {
-  const [openedFilter, setOpenedFilter] = useState<string>("");
+  const openedFilter = useOpenedFilter((state) => state.openedFilter);
+  const setOpenedFilter = useOpenedFilter((state) => state.setOpenedFilter);
+
+  const costFilter = useFilterProps((state) => state.costFilter);
+  const squareFilter = useFilterProps((state) => state.squareFilter);
+  const roomsAmountFilter = useFilterProps((state) => state.roomsAmountFilter);
+
+  const setCostFilter = useFilterProps((state) => state.setCostFilter);
+  const setSquareFilter = useFilterProps((state) => state.setSquareFilter);
+  const setRoomsAmountFilter = useFilterProps(
+    (state) => state.setRoomsAmountFilter,
+  );
+
+  const { register, handleSubmit } = useForm();
 
   return (
     <div className="mt-8 h-20 w-full">
       <ul className="flex h-2/3 w-full items-center">
         <div className="relative h-full w-2/12">
           <button
-            onClick={() => setOpenedFilter("cost")}
+            onClick={() =>
+              openedFilter === "cost"
+                ? setOpenedFilter("")
+                : setOpenedFilter("cost")
+            }
             className="h-full w-full rounded-l-md border-2 bg-white pl-5 text-left"
           >
             Цена
@@ -58,11 +76,31 @@ const ApartmentFilterbar = () => {
             </div>
           )}
         </div>
-        <input
-          type="text"
-          placeholder="Комнатность"
-          className="h-full w-2/12 border-2 pl-5"
-        />
+        <div className="relative h-full w-2/12">
+          <button
+            onClick={() =>
+              openedFilter === "rooms_amount"
+                ? setOpenedFilter("")
+                : setOpenedFilter("rooms_amount")
+            }
+            className="h-full w-full border-y-2 bg-white pl-5 text-left"
+          >
+            Комнатность
+          </button>
+          {openedFilter === "rooms_amount" && (
+            <div className="absolute z-10 mt-2 flex h-20 w-fit items-center rounded-md border-2 bg-white">
+              <ul className="p-x-3 flex w-60 justify-around">
+                <li className="w-1/6 rounded-md border-2 p-2 text-center">1</li>
+                <li className="w-1/6 rounded-md border-2 p-2 text-center">2</li>
+                <li className="w-1/6 rounded-md border-2 p-2 text-center">3</li>
+                <li className="w-1/6 rounded-md border-2 p-2 text-center">4</li>
+                <li className="w-1/6 rounded-md border-2 p-2 text-center">
+                  5+
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
         <input
           type="text"
           placeholder="Район"
