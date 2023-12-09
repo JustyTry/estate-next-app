@@ -56,7 +56,7 @@ const ApartmentFilterbar = () => {
                 ? setOpenedFilter("")
                 : setOpenedFilter("square")
             }
-            className="h-full w-full border-y-2 bg-white pl-5 text-left"
+            className="h-full w-full border-y-2 border-r-2 bg-white pl-5 text-left"
           >
             Площадь
           </button>
@@ -83,7 +83,7 @@ const ApartmentFilterbar = () => {
                 ? setOpenedFilter("")
                 : setOpenedFilter("rooms_amount")
             }
-            className="h-full w-full border-y-2 bg-white pl-5 text-left"
+            className="h-full w-full border-y-2 border-r-2 bg-white pl-5 text-left"
           >
             Комнатность
           </button>
@@ -104,7 +104,7 @@ const ApartmentFilterbar = () => {
         <input
           type="text"
           placeholder="Район"
-          className="h-full w-5/12 border-y-2 pl-5"
+          className="h-full w-5/12 border-y-2 pl-5 outline-none"
         />
 
         <button
